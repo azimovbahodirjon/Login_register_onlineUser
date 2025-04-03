@@ -3,7 +3,7 @@ import { useCollection } from "../hook/useCollection";
 
 function OnLineUser() {
   const { data } = useCollection("users");
-  const { user } = useSelector((store) => store.user); // Hozirgi foydalanuvchi
+  const { user } = useSelector((store) => store.user);
 
   let sortedUsers = [];
   if (data) {

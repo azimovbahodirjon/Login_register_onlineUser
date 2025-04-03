@@ -1,4 +1,11 @@
-import { doc, updateDoc, setDoc, addDoc, collection } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  setDoc,
+  addDoc,
+  collection,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useEffect, useReducer, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -37,9 +44,16 @@ export function useFireStore(c) {
   const addDocument = async (id, data) => {
     dispatchIfNotCanceled({ type: "IS_PENDING" });
     try {
-      await setDoc(doc(db, c, id), data);
-      dispatchIfNotCanceled({ type: "ADD_DATA", payload: data });
-      toast.success("Successfully added!");
+      const docRef = doc(db, c, id);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(docRef, data);
+        dispatchIfNotCanceled({ type: "ADD_DATA", payload: data });
+        toast.success("Successfully added!");
+      } else {
+        toast.error("Document already exists!");
+      }
     } catch (error) {
       dispatchIfNotCanceled({ type: "ERROR", payload: error.message });
       toast.error("This didn't work!");
@@ -58,6 +72,7 @@ export function useFireStore(c) {
       toast.error("This didn't work!");
     }
   };
+
   const addTask = async (data) => {
     dispatchIfNotCanceled({ type: "IS_PENDING" });
     try {

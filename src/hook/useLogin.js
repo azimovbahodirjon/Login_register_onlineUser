@@ -17,16 +17,21 @@ export const useLogin = () => {
     try {
       const req = await signInWithEmailAndPassword(auth, email, password);
       const user = req.user;
-      dispatch(_login(user));
-      await addDocument(user.uid, {
+
+      const updatedUser = {
         displayName: user.displayName || "Anonymous",
         email: user.email,
         isOnline: true,
         photoURL:
           user.photoURL ||
           "https://api.dicebear.com/9.x/adventurer/svg?seed=" + user.email,
-      });
+      };
+
+      dispatch(_login(user));
+
+      await addDocument(user.uid, updatedUser);
       await updateDocument(user.uid, { isOnline: true });
+
       setUser(user);
       toast.success(`Welcome back ${user.displayName}`);
     } catch (error) {

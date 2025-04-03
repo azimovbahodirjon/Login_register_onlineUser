@@ -4,7 +4,7 @@ import { RxDashboard } from "react-icons/rx";
 import { MdCreateNewFolder } from "react-icons/md";
 import { IoIosSettings } from "react-icons/io";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importing the useNavigate hook
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const { user } = useSelector((store) => store.user);
@@ -13,7 +13,7 @@ function Sidebar() {
 
   const handleNavigation = (route) => {
     setActive(route);
-    navigate(`/${route.toLowerCase()}`); // Navigate to the respective route
+    navigate(`/${route.toLowerCase()}`);
   };
 
   return (
